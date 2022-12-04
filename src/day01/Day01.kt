@@ -5,12 +5,25 @@ import java.io.File
 object Day01 {
 
     @JvmStatic
-    fun main(args: Array<String>) = part1()
+    fun main(args: Array<String>) = part2()
 
     fun part1() {
         val elves = readElves("src/day01/part01-input.txt")
         println(elves.size)
         println(elves.maxOf { it.calories.sum() }) // 71934
+    }
+
+    fun part2() {
+        val elves = readElves("src/day01/part01-input.txt")
+
+        // Oh look, I was right that we care about more than just the max~
+        val topThree = elves
+            .map { it.totalCalories() }
+            .sortedDescending()
+            .take(3)
+
+        println(topThree) // [71934, 69849, 69664]
+        println(topThree.sum()) // 211447
     }
 
     fun readElves(filename: String): List<Elf> {
@@ -43,4 +56,6 @@ object Day01 {
     }
 }
 
-data class Elf(val calories: List<Int>)
+data class Elf(val calories: List<Int>) {
+    fun totalCalories() = calories.sum()
+}

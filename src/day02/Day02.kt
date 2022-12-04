@@ -8,30 +8,32 @@ object Day02 {
     fun main(args: Array<String>) = part2()
 
     fun part1() {
-        val strat = readStrategy("src/day02/part01-input.txt")
+        val strat = readStrategy("src/day02/part01-input.txt") { arg1, arg2 ->
+            RPSStrategy1(them = RPS.fromOpponentChoice(arg1), me = RPS.fromMyChoice(arg2))
+        }
         println(strat.sumOf { it.score() }) // 11603
     }
 
-    fun readStrategy(filename: String): List<RPSStrategy> =
-        File(filename).readLines().map {
-            val parts = it.split(" ")
-            RPSStrategy(them = RPS.fromOpponentChoice(parts[0]), me = RPS.fromMyChoice(parts[1]))
-        }
-
     fun part2() {
-        val strat = readStrategy2("src/day02/part01-input.txt")
+        val strat = readStrategy("src/day02/part01-input.txt") { arg1, arg2 ->
+            RPSStrategy2(them = RPS.fromOpponentChoice(arg1), result = RPSResult.fromString(arg2))
+        }
         println(strat.sumOf { it.score() }) // 12725
     }
 
-    fun readStrategy2(filename: String): List<RPSStrategy2> =
+    fun <T: RPSStrategy> readStrategy(filename: String, block: (arg1: String, arg2: String) -> T): List<T> =
         File(filename).readLines().map {
-            val parts = it.split(" ")
-            RPSStrategy2(them = RPS.fromOpponentChoice(parts[0]), result = RPSResult.fromString(parts[1]))
+            val args = it.split(" ")
+            block(args[0], args[1])
         }
 }
 
-data class RPSStrategy(val them: RPS, val me: RPS) {
-    fun score(): Int {
+interface RPSStrategy {
+    fun score(): Int
+}
+
+data class RPSStrategy1(val them: RPS, val me: RPS) : RPSStrategy {
+    override fun score(): Int {
         val result = when {
             them == me -> RPSResult.DRAW
             them.losesTo() == me -> RPSResult.WIN
@@ -42,9 +44,9 @@ data class RPSStrategy(val them: RPS, val me: RPS) {
     }
 }
 
-data class RPSStrategy2(val them: RPS, val result: RPSResult) {
+data class RPSStrategy2(val them: RPS, val result: RPSResult) : RPSStrategy {
 
-    fun score(): Int {
+    override fun score(): Int {
         val myRPS = when (result) {
             RPSResult.WIN -> them.losesTo()
             RPSResult.DRAW -> them

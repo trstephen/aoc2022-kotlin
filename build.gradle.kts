@@ -34,7 +34,3 @@ tasks.test {
 tasks.withType<KotlinCompile>().all {
     kotlinOptions.allWarningsAsErrors = true
 }
-
-application {
-    mainClass.set("MainKt")
-}

@@ -33,6 +33,7 @@ interface RPSStrategy {
 }
 
 data class RPSStrategy1(val them: RPS, val me: RPS) : RPSStrategy {
+
     override fun score(): Int {
         val result = when {
             them == me -> RPSResult.DRAW

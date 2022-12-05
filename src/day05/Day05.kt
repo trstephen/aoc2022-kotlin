@@ -45,7 +45,7 @@ enum class CargoType(val filename: String, val initCargo: Cargo) {
 data class Move(val num: Int, val src: Int, val dest: Int) {
     companion object {
 
-        private val re = """^move (\d+) from (\d+) to (\d+)""".toRegex()
+        private val re = """^move (\d+) from (\d+) to (\d+)$""".toRegex()
         fun fromString(s: String): Move {
             val match = re.matchEntire(s) ?: error("No move match for '$s'")
             val (num, src, dest) = match.destructured
@@ -84,7 +84,7 @@ fun Cargo.message(): String = values.map { it.last() }.joinToString(separator = 
 private tailrec fun Cargo.applyMoves(moves: List<Move>, mover: CargoMover): Cargo =
     if (moves.isEmpty()) this
     else {
-        mover(moves.first())
+        this.mover(moves.first())
         this.applyMoves(moves.drop(1), mover)
     }
 

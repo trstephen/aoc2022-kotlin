@@ -33,14 +33,25 @@ sealed class TermOutput {
 object Day07 {
 
     @JvmStatic
-    fun main(args: Array<String>) = part1()
+    fun main(args: Array<String>) = part2()
 
     val input = File("src/day07/input.txt").readLines()
 
     fun part1() {
         val output = input.mapNotNull { TermOutput.fromString(it) }
         val dirMap = processTermOutput(output)
-        println(dirMap.values.filter { it < 100_000 }.sum())
+        println(dirMap.values.filter { it < 100_000 }.sum()) // 1_118_405
+    }
+
+    fun part2() {
+        val output = input.mapNotNull { TermOutput.fromString(it) }
+        val dirMap = processTermOutput(output)
+
+        val maxAllowedStored = 40_000_000 // 70M - 30M
+        val totalStored = dirMap["root"]!! // 50_216_456
+        val needToDelete = totalStored - maxAllowedStored // 10_216_456
+
+        println(dirMap.values.filter { it > needToDelete }.min()) // 12_545_514
     }
 
     tailrec fun processTermOutput(

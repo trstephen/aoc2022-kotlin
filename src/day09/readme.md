@@ -253,3 +253,9 @@ So, there are 13 positions the tail visited at least once.
 Simulate your complete hypothetical series of motions. _How many positions does the tail of the rope visit at least once?_
 
 **Solution**: 6563
+
+## Part 2
+
+_The example is way too long. Go [read it](https://adventofcode.com/2022/day/9#part2)
+
+**Solution**: XXX

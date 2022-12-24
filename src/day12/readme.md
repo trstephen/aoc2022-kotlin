@@ -32,7 +32,7 @@ This path reaches the goal in 31 steps, the fewest possible.
 
 _What is the fewest steps required to move from your current position to the location that should get the best signal?_
 
-**Solution**: XXX
+**Solution**: 440
 
 ## Part 2
 

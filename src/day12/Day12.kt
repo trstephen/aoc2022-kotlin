@@ -7,22 +7,41 @@ import java.io.File
 object Day12 {
 
     @JvmStatic
-    fun main(args: Array<String>) = part1()
+    fun main(args: Array<String>) = part2()
 
     val input = File("src/day12/input.txt").readLines()
 
-    fun part1() {
-        val grid = Grid.fromLines(input) { it.toList() }
-        val start = grid.findFirstOrNull('S') ?: error("Couldn't find 'S'")
-        val end = grid.findFirstOrNull('E') ?: error("Couldn't find 'E'")
-        println("Navigating $start -> $end")
-//        grid.prettyPrint()
+    val grid = Grid.fromLines(input) { it.toList() }
 
-        // BFS time!
-        // This is gonna be a pain to extend to part 2, maybe just hack part1?
+    fun part1() {
+        val steps = bfs(
+            start = grid.findFirstOrNull('S') ?: error("Couldn't find 'S'"),
+            end = 'E',
+            via = canClimb,
+        )
+        println(steps) // 440
+    }
+
+    fun part2() {
+        // Let's see if we can reverse this by searching E -> first 'a'
+        // instead of finding all 'a' and comparing lengths.
+        val steps = bfs(
+            start = grid.findFirstOrNull('E') ?: error("Couldn't find 'E"),
+            end = 'a',
+            via = canDescend,
+        )
+        println(steps) // 439
+    }
+
+    fun bfs(
+        start: Point,
+        end: Char,
+        via: Grid<Char>.(Point, Point) -> Boolean,
+    ): Int? {
         val visited = mutableSetOf<Point>()
         val paths = ArrayDeque<List<Point>>()
         paths.add(listOf(start))
+
         while (paths.isNotEmpty()) {
             val path = paths.removeFirst()
             val head = path.last()
@@ -30,17 +49,14 @@ object Day12 {
             if (head in visited) continue
             visited.add(head)
 
-            if (head == end) {
-//                println(path.joinToString(" -> "))
-                println(path.size - 1) // 440
-                return
-            }
+            if (grid[head] == end) return path.size - 1
 
             grid.neighborsOf(head)
-                .filter { grid.canClimb(from = head, to = it) }
+                .filter { grid.via(head, it) }
                 .forEach { paths.add(path + it) }
         }
-        error("No path found???")
+
+        return null
     }
 
     fun <T: Any> Grid<T>.neighborsOf(p: Point): List<Point> {
@@ -51,11 +67,18 @@ object Day12 {
             .filterNot { this[it] == null }
     }
 
-    fun Grid<Char>.canClimb(from: Point, to: Point): Boolean {
+    val canClimb = fun Grid<Char>.(from: Point, to: Point): Boolean {
         val fromV = this[from] ?: return false
         val toV = this[to] ?: return false
 
         return toV.height() <= fromV.height() + 1
+    }
+
+    val canDescend = fun Grid<Char>.(from: Point, to: Point): Boolean {
+        val fromV = this[from] ?: return false
+        val toV = this[to] ?: return false
+
+        return toV.height() + 1 >= fromV.height()
     }
 
     fun Char.height(): Int =
@@ -64,8 +87,4 @@ object Day12 {
             'E' -> 26
             else -> this.code - 'a'.code + 1
         }
-
-    fun List<MutableList<Boolean>>.visit(p: Point) {
-        this[p.y][p.x] = true
-    }
 }

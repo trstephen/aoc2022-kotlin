@@ -4,4 +4,4 @@
 
 ## Part 2
 
-**Solution**: XXX
+**Solution**: 23049

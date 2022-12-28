@@ -9,7 +9,7 @@ import java.io.File
 object Day13 {
 
     @JvmStatic
-    fun main(args: Array<String>) = part1()
+    fun main(args: Array<String>) = part2()
 
     val input = File("src/day13/input.txt").readLines()
 
@@ -21,6 +21,22 @@ object Day13 {
 
         val orderedSignals = signals.filter { it.left <= it.right }
         println(orderedSignals.sumOf { it.idx }) // 6623
+    }
+
+    fun part2() {
+        val dividerSignals = listOf(2, 6).map {
+            SignalData.SignalList(elems = listOf(SignalData.SignalList(it)))
+        }
+        val signals = input.chunked(3).flatMap { lines ->
+            listOf(lines[0].toSignal(), lines[1].toSignal())
+        } + dividerSignals
+
+        val sortedSignals = signals.sorted()
+        val dividerIdxs = dividerSignals.map {
+            sortedSignals.indexOf(it) + 1
+        }
+        println(dividerIdxs) // [117, 197]
+        println(dividerIdxs.reduce(Int::times)) // 23049
     }
 
     data class Signal(val left: SignalData, val right: SignalData, val idx: Int) {

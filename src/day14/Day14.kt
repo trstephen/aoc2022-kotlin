@@ -8,7 +8,7 @@ import kotlin.math.min
 object Day14 {
 
     @JvmStatic
-    fun main(args: Array<String>) = part1()
+    fun main(args: Array<String>) = part2()
 
     val input = File("src/day14/input.txt").readLines()
 
@@ -37,8 +37,34 @@ object Day14 {
         println(occupiedPoints.size - rockPoints.size) // 825
     }
 
-    fun descend(start: Point): DescendResult {
-        if (start.y == floor) return DescendResult.AtFloor
+    fun part2() {
+        // drop sand into the occupied points
+        // descend until 1) we reach the lowest y 2) we exhaust possible moves
+        var settledAtTop = false
+        while (!settledAtTop) {
+            var sandPoint = Point(500, 0)
+            while (true) {
+                when (val result = descend(sandPoint, floor + 1)) {
+                    DescendResult.AtFloor -> {
+                        occupiedPoints += sandPoint
+                        break
+                    }
+                    is DescendResult.Falling -> {
+                        sandPoint = result.p
+                    }
+                    is DescendResult.Settled -> {
+                        occupiedPoints += result.p
+                        if (result.p.y == 0) settledAtTop = true
+                        break
+                    }
+                }
+            }
+        }
+        println(occupiedPoints.size - rockPoints.size) // 26729
+    }
+
+    fun descend(start: Point, limit: Int = floor): DescendResult {
+        if (start.y == limit) return DescendResult.AtFloor
 
         return listOf(
             Point(start.x, start.y + 1),

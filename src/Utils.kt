@@ -34,7 +34,16 @@ data class Grid<T: Any>(val elements: List<List<T>>) {
 }
 
 data class Point(val x: Int, val y: Int) {
+
     override fun toString() = "($x, $y)"
+
+    /**
+     * The vector from `this` to [other], treating `this` as the origin.
+     */
+    fun vecTo(other: Point) = Point(
+        x = x - other.x,
+        y = y - other.y,
+    )
 }
 
 fun <T: Any> List<List<T>>.prettyPrint() {

@@ -1,12 +1,10 @@
 ## [Day 13: Distress Signal](https://adventofcode.com/2022/day13)
 
-**Solution**: 6623
+**Part 1 Solution**: 6623
 
-## Part 2
+**Part 2 Solution**: 23049
 
-**Solution**: 23049
-
-## Reflections
+### Reflections
 This was fun! After I gave up on implementing my own parser ^_^;
 
 I used this as an excuse to learn the [`kotlinx.serialization`][gh-kotlinx-ser] lib. MEGO while reading the custom serialization stuff, and the pain of stuffing this in to my own data class didn't seem necessary. Mapping the raw `JsonElement`s to my custom classes felt like a good balance.

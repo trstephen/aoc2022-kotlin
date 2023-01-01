@@ -1,6 +1,7 @@
 package day14
 
 import util.Point
+import util.measurePerf
 import java.io.File
 import kotlin.math.max
 import kotlin.math.min
@@ -8,7 +9,7 @@ import kotlin.math.min
 object Day14 {
 
     @JvmStatic
-    fun main(args: Array<String>) = part2()
+    fun main(args: Array<String>) = measurePerf { part2() }
 
     val input = File("src/day14/input.txt").readLines()
 

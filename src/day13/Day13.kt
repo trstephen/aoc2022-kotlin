@@ -4,12 +4,13 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonPrimitive
+import util.measurePerf
 import java.io.File
 
 object Day13 {
 
     @JvmStatic
-    fun main(args: Array<String>) = part2()
+    fun main(args: Array<String>) = measurePerf { part2() }
 
     val input = File("src/day13/input.txt").readLines()
 

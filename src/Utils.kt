@@ -1,5 +1,9 @@
 package util
 
+import kotlin.math.abs
+import kotlin.time.ExperimentalTime
+import kotlin.time.measureTime
+
 data class Grid<T: Any>(val elements: List<List<T>>) {
 
     val numRows = elements.size
@@ -44,8 +48,39 @@ data class Point(val x: Int, val y: Int) {
         x = x - other.x,
         y = y - other.y,
     )
+
+    /**
+     * Distance from the origin to this [Point] measured by
+     * Manhattan distance.
+     */
+    val manhattanLength: Int
+        get() = abs(x) + abs(y)
 }
 
 fun <T: Any> List<List<T>>.prettyPrint() {
     println(this.joinToString(separator = "\n") { line -> line.joinToString("\t") })
+}
+
+fun Runtime.usedMemory(): Long = totalMemory() - freeMemory()
+
+/**
+ * Print with commas separating digits in groups of 3
+ * e.g. 1234567 -> 1,234,567
+ */
+fun Number.prettyPrint(): String = "%,d".format(this)
+
+@OptIn(ExperimentalTime::class)
+fun measurePerf(block: () -> Unit) {
+    val runtime = Runtime.getRuntime()
+    val memBefore = runtime.usedMemory()
+
+    val t = measureTime(block)
+    val memAfter = runtime.usedMemory()
+    val usedKb = (memAfter - memBefore) / 1024
+
+    println()
+    println("== Perf report")
+    println("Runtime: ${t.inWholeMilliseconds.prettyPrint()} ms")
+    println("Memory : ${usedKb.prettyPrint()} kB")
+
 }

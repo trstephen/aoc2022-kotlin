@@ -1,8 +1,18 @@
 ## [Day 13: Distress Signal](https://adventofcode.com/2022/day13)
 
 **Part 1 Solution**: 6623
+```text
+== Perf report
+Runtime: 167 ms
+Memory : 9,752 kB
+```
 
 **Part 2 Solution**: 23049
+```text
+== Perf report
+Runtime: 107 ms
+Memory : 7,253 kB
+```
 
 ### Reflections
 This was fun! After I gave up on implementing my own parser ^_^;

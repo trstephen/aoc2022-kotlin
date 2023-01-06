@@ -1,5 +1,7 @@
 package util
 
+import java.time.Instant
+import java.util.Collections
 import kotlin.math.abs
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTime
@@ -59,6 +61,30 @@ data class Point(val x: Int, val y: Int) {
 
 fun <T: Any> List<List<T>>.prettyPrint() {
     println(this.joinToString(separator = "\n") { line -> line.joinToString("\t") })
+}
+
+fun <T> permute(l: Collection<T>): Sequence<List<T>> = sequence {
+    // https://en.wikipedia.org/wiki/Heap%27s_algorithm
+
+    val state = MutableList(l.size) { 0 }
+    val output = l.toMutableList()
+
+    yield(output.toList())
+
+    var i = 1
+    while (i < l.size) {
+        if (state[i] < i) {
+            if (i % 2 == 0) Collections.swap(output, 0, i) else Collections.swap(output, state[i], i)
+
+            yield(output.toList())
+
+            state[i] += 1
+            i = 1
+        } else {
+            state[i] = 0
+            i++
+        }
+    }
 }
 
 fun Runtime.usedMemory(): Long = totalMemory() - freeMemory()

@@ -219,7 +219,7 @@ object Day15 {
         companion object {
             private val re = """Sensor at x=(-?\d+), y=(-?\d+): closest beacon is at x=(-?\d+), y=(-?\d+)""".toRegex()
             fun fromString(s: String): SensorReport {
-                val (_, sx, sy, bx, by) = re.matchEntire(s)?.groupValues ?: error("No match on '$s'")
+                val (sx, sy, bx, by) = re.matchEntire(s)?.destructured ?: error("No match on '$s'")
                 return SensorReport(
                     sensor = Point(sx.toInt(), sy.toInt()),
                     beacon = Point(bx.toInt(), by.toInt()),
